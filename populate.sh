@@ -1,0 +1,1 @@
+docker-compose run -d --rm --no-deps --use-aliases -v $(pwd)/environment_airq_measurand.csv:/data.csv:ro api ./airquality /data.csv
