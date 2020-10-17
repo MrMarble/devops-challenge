@@ -19,6 +19,7 @@ func main() {
 		os.Getenv("POSTGRES_DB"),
 	)
 
+	// If there is an argument, call the migration
 	if len(os.Args) > 1 {
 		models.LoadData(os.Args[1])
 	}
