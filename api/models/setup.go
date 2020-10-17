@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/gocarina/gocsv"
 	"gorm.io/driver/postgres"
@@ -34,7 +35,7 @@ func ConnectDataBase(host string, port string, user string, password string, dbn
 
 // LoadData reads a csv file into the database
 func LoadData(filePath string) {
-	file, err := os.OpenFile(filePath, os.O_RDONLY, os.ModePerm)
+	file, err := os.OpenFile(filepath.Clean(filePath), os.O_RDONLY, os.ModePerm)
 	if err != nil {
 		panic(err)
 	}
