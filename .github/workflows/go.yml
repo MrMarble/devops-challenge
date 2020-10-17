@@ -9,7 +9,6 @@ on:
     paths: ['api/**.go']
   workflow_dispatch:
     
-
 jobs:
 
   build:
@@ -32,8 +31,6 @@ jobs:
     - name: Build
       run: go build -v 
       working-directory: /home/runner/work/cartodb/cartodb/api
-      env: 
-        GOPATH: /home/runner/work/cartodb/cartodb/api
 
     - name: Run gofmt
       run: |
