@@ -25,7 +25,10 @@ func ConnectDataBase(host string, port string, user string, password string, dbn
 		log.Panic("Failed to connect to database!")
 	}
 
-	database.AutoMigrate(&AirQuality{})
+	err = database.AutoMigrate(&AirQuality{})
+	if err != nil {
+		log.Panic("Failed to connect to database!")
+	}
 	DB = database
 }
 
@@ -35,11 +38,17 @@ func LoadData(filePath string) {
 	if err != nil {
 		panic(err)
 	}
-	defer file.Close()
+
+	defer func() {
+		err := file.Close()
+		if err != nil {
+			log.Panic(err)
+		}
+	}()
 
 	airEntries := []*AirQuality{}
 	if err := gocsv.UnmarshalFile(file, &airEntries); err != nil {
-		panic(err)
+		log.Panic(err)
 	}
 	for _, airQuality := range airEntries {
 		// If data already exists ignore warnings

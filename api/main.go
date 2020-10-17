@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"os"
 
@@ -32,5 +33,8 @@ func main() {
 
 	r.GET("/air_quality", controllers.GetAll)
 
-	r.Run()
+	err := r.Run()
+	if err != nil {
+		log.Panic(err)
+	}
 }
