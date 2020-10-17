@@ -1,5 +1,7 @@
 # Air quality API
 
+![Go](https://github.com/MrMarble/cartodb/workflows/Go/badge.svg?branch=main&event=push)
+
 API REST in Go that returns a JSON containing data from air quality measurements with the following structure:
 
 ```json
