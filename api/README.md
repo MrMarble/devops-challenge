@@ -6,7 +6,7 @@ API REST in Go that returns a JSON containing data from air quality measurements
 
 ```json
 {
-    data: [
+    "data": [
         {
             "timestamp":"2016-10-01 00:00:00.004",
             "id_entity":"aq_salvia",
@@ -34,3 +34,10 @@ POSTGRES_PASSWORD
 POSTGRES_DB
 GIN_MODE # Switch to "release" mode in production. Default "debug"
 ```
+
+## Available Endpoints
+
+- `/ (root)`: It serves as a way to check the health of the api, will return `OK` if it can access the database
+  
+- `/air_quality`: Returns the JSON data
+  
