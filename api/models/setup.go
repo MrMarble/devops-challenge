@@ -8,6 +8,7 @@ import (
 	"github.com/gocarina/gocsv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // DB represents the database with queries
@@ -41,7 +42,9 @@ func LoadData(filePath string) {
 		panic(err)
 	}
 	for _, airQuality := range airEntries {
-		DB.Create(airQuality)
+		DB.Clauses(clause.OnConflict{
+			DoNothing: true,
+		}).Create(airQuality)
 	}
 	DB.Commit()
 	os.Exit(0)
