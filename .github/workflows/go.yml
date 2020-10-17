@@ -29,8 +29,9 @@ jobs:
     - name: Install tools
       run: go get -u golang.org/x/tools/go/analysis/passes/shadow/cmd/shadow golang.org/x/lint/golint honnef.co/go/tools/cmd/staticcheck github.com/kisielk/errcheck github.com/securego/gosec/cmd/gosec
 
-    - name: Get dependencies
-      run: go get ./api
+    - name: Build
+      run: go build -v 
+      working-directory: /home/runner/work/cartodb/cartodb/api
       env: 
         GOPATH: /home/runner/work/cartodb/cartodb/api
 
@@ -44,25 +45,29 @@ jobs:
       shell: bash
 
     - name: Run go vet
+      working-directory: /home/runner/work/cartodb/cartodb/api
       run: go vet
 
     - name: Run go vet -vettool shadow
+      working-directory: /home/runner/work/cartodb/cartodb/api
       run: go vet -vettool $(which shadow)
 
     - name: Run golint
+      working-directory: /home/runner/work/cartodb/cartodb/api
       run: golint -set_exit_status ./...
 
     - name: Run staticcheck
+      working-directory: /home/runner/work/cartodb/cartodb/api
       run: staticcheck ./...
 
     - name: Run errcheck
+      working-directory: /home/runner/work/cartodb/cartodb/api
       run: errcheck ./...
 
     - name: Run gosec
+      working-directory: /home/runner/work/cartodb/cartodb/api
       run: gosec -quiet -fmt=golint ./...    
 
-    - name: Build
-      run: go build -v .
-
     - name: Test
+      working-directory: /home/runner/work/cartodb/cartodb/api
       run: go test -v .
