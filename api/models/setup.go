@@ -42,6 +42,7 @@ func LoadData(filePath string) {
 		panic(err)
 	}
 	for _, airQuality := range airEntries {
+		// If data already exists ignore warnings
 		DB.Clauses(clause.OnConflict{
 			DoNothing: true,
 		}).Create(airQuality)
