@@ -12,6 +12,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -o airquality .
 
 # Remove golang dependencies
 FROM alpine:latest
+RUN apk --no-cache add postgresql-client
 WORKDIR /airquality/
 COPY --from=builder /source/airquality .
 # Run api
