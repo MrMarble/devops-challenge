@@ -59,9 +59,6 @@ spec:
       initContainers:
         - name: init-db
           image: mrmarble/cartodb:latest
-          volumeMounts:
-            - mountPath: /environment_airq_measurand.csv
-              name: init-data
           env:
             - name: POSTGRES_HOST
               value: database
@@ -83,12 +80,7 @@ spec:
             [
               "sh",
               "-c",
-              "while ! pg_isready -h $${POSTGRES_HOST} -p $${POSTGRES_PORT} -U $${POSTGRES_USER}; do sleep 5; done && ./airquality /environment_airq_measurand.csv",
+              "while ! pg_isready -h $${POSTGRES_HOST} -p $${POSTGRES_PORT} -U $${POSTGRES_USER}; do sleep 5; done && ./airquality https://gist.githubusercontent.com/jvillarf/040c91397d779d4da02fff54708ca935/raw/f1dbbcbfbc4e3daace7d907a3cc5b716ef808014/environment_airq_measurand.csv",
             ]
       restartPolicy: Always
       serviceAccountName: ""
-      volumes:
-        - name: init-data
-          hostPath:
-            path: /run/desktop/mnt/host/wsl/cartodb/environment_airq_measurand.csv
-            type: File
