@@ -71,6 +71,7 @@ jobs:
     # Deploy the Docker image to the GKE cluster
     - name: Deploy
       run: |-
-        ./kustomize edit set image mrmarble/cartodb=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
-        ./kustomize build deployment/ | kubectl apply -f -
+        cd deployment
+        .././kustomize edit set image mrmarble/cartodb=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
+        .././kustomize build deployment/ | kubectl apply -f -
         kubectl get services -o wide
