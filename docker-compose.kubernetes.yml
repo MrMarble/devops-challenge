@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+    api:
+        image: mrmarble/cartodb:latest
+        restart: always
+        ports:
+            - "8000:8080"
+        environment:
+            - PORT=8080
+            - POSTGRES_USER
+            - POSTGRES_PASSWORD
+            - POSTGRES_DB
+            - POSTGRES_HOST=database
+            - POSTGRES_PORT=5432
+            - GIN_MODE=release
+
+    database:
+        image: postgres:12
+        restart: always
+        volumes:
+            - dbdata:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_USER
+            - POSTGRES_PASSWORD
+            - POSTGRES_DB
+
+volumes:
+    dbdata:

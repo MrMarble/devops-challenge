@@ -1,0 +1,28 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  labels:
+    io.kompose.service: dbdata
+  name: dbdata
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/data"
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  labels:
+    io.kompose.service: dbdata
+  name: dbdata
+spec:
+  capacity:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi

@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose.kubernetes.yml
+    kompose.version: 1.21.0 (992df58d8)
+  labels:
+    io.kompose.service: api
+  name: api
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      io.kompose.service: api
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../docker-compose.kubernetes.yml
+        kompose.version: 1.21.0 (992df58d8)
+      labels:
+        io.kompose.service: api
+    spec:
+      containers:
+        - env:
+            - name: PORT
+              value: "8080"
+            - name: GIN_MODE
+              value: release
+            - name: POSTGRES_HOST
+              value: database
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DB
+              value: airquality
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+          image: mrmarble/cartodb:latest
+          name: api
+          ports:
+            - containerPort: 8080
+          resources: {}
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /
+            periodSeconds: 5
+            initialDelaySeconds: 5
+      imagePullSecrets:
+        - name: regcred
+      initContainers:
+        - name: init-db
+          image: mrmarble/cartodb:latest
+          volumeMounts:
+            - mountPath: /environment_airq_measurand.csv
+              name: init-data
+          env:
+            - name: POSTGRES_HOST
+              value: database
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DB
+              value: airquality
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+          command:
+            [
+              "sh",
+              "-c",
+              "while ! pg_isready -h $${POSTGRES_HOST} -p $${POSTGRES_PORT} -U $${POSTGRES_USER}; do sleep 5; done && ./airquality /environment_airq_measurand.csv",
+            ]
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+        - name: init-data
+          hostPath:
+            path: /run/desktop/mnt/host/wsl/cartodb/environment_airq_measurand.csv
+            type: File
