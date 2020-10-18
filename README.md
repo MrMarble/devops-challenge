@@ -21,7 +21,7 @@ There is also a [docker-compose](docker-compose.yml) environment that will set u
 
 ---
 
-Inside the [workflows](.github/workflows) directory there is a Github Actions's file `integration.yml` that provide all the necessary instructions to deploy the API
+Inside the [workflows](.github/workflows) directory there is a Github Actions's file called [deployment.yml](.github/workflows/deployment.yml) that provide all the necessary instructions to deploy the API on Google Cloud
 
 ## Deployment
 
