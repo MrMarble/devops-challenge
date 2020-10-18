@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -27,9 +26,7 @@ func main() {
 
 	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "OK")
-	})
+	r.GET("/", controllers.HealthCheck)
 
 	r.GET("/air_quality", controllers.GetAll)
 
