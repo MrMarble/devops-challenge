@@ -2,7 +2,10 @@ package models
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
+	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 
@@ -35,20 +38,10 @@ func ConnectDataBase(host string, port string, user string, password string, dbn
 
 // LoadData reads a csv file into the database
 func LoadData(filePath string) {
-	file, err := os.OpenFile(filepath.Clean(filePath), os.O_RDONLY, os.ModePerm)
-	if err != nil {
-		panic(err)
-	}
-
-	defer func() {
-		err := file.Close()
-		if err != nil {
-			log.Panic(err)
-		}
-	}()
+	csvData := readData(filePath)
 
 	airEntries := []*AirQuality{}
-	if err := gocsv.UnmarshalFile(file, &airEntries); err != nil {
+	if err := gocsv.UnmarshalBytes(csvData, &airEntries); err != nil {
 		log.Panic(err)
 	}
 	for _, airQuality := range airEntries {
@@ -59,4 +52,51 @@ func LoadData(filePath string) {
 	}
 	DB.Commit()
 	os.Exit(0)
+}
+
+func isURL(test string) bool {
+	if _, err := url.ParseRequestURI(test); err != nil {
+		return false
+	}
+	return true
+}
+
+func readURL(url string) []byte {
+	response, err := http.Get(url)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	defer func() {
+		err := response.Body.Close()
+		if err != nil {
+			log.Panic(err)
+		}
+	}()
+	if response.StatusCode != http.StatusOK {
+		log.Panicf("Response status error: %v", response.StatusCode)
+	}
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		log.Panic(err)
+	}
+	return body
+}
+
+func readFile(filePath string) []byte {
+
+	content, err := ioutil.ReadFile(filepath.Clean(filePath))
+	if err != nil {
+		log.Panic(err)
+	}
+	return content
+}
+
+func readData(source string) []byte {
+	if isURL(source) {
+		log.Print("Init file is a remote url")
+		return readURL(source)
+	}
+	log.Print("Init file is local")
+	return readFile(source)
 }
