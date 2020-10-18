@@ -73,5 +73,5 @@ jobs:
       run: |-
         cd deployment
         .././kustomize edit set image mrmarble/cartodb=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
-        .././kustomize build deployment/ | kubectl apply -f -
+        .././kustomize build . | kubectl apply -f -
         kubectl get services -o wide
