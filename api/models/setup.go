@@ -54,15 +54,16 @@ func LoadData(filePath string) {
 	os.Exit(0)
 }
 
-func isURL(test string) bool {
-	if _, err := url.ParseRequestURI(test); err != nil {
-		return false
+func isURL(test string) (*url.URL, error) {
+	u, err := url.ParseRequestURI(test)
+	if err != nil {
+		return nil, err
 	}
-	return true
+	return u, nil
 }
 
-func readURL(url string) []byte {
-	response, err := http.Get(url)
+func readURL(u *url.URL) []byte {
+	response, err := http.Get(u.String())
 	if err != nil {
 		log.Panic(err)
 	}
@@ -93,9 +94,10 @@ func readFile(filePath string) []byte {
 }
 
 func readData(source string) []byte {
-	if isURL(source) {
+	u, err := isURL(source)
+	if err == nil {
 		log.Print("Init file is a remote url")
-		return readURL(source)
+		return readURL(u)
 	}
 	log.Print("Init file is local")
 	return readFile(source)
