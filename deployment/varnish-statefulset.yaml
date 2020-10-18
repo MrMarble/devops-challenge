@@ -45,6 +45,7 @@ spec:
               mountPath: /etc/varnish/tmpl
             - name: secret
               mountPath: /etc/varnish/k8s-secret
+      serviceAccountName: kube-httpcache
       restartPolicy: Always
       volumes:
         - name: template
