@@ -21,13 +21,15 @@ There is also a [docker-compose](docker-compose.yml) environment that will set u
 
 ---
 
-Inside the [workflows](.github/workflows) directory there is a Github Actions's file called [deployment.yml](.github/workflows/deployment.yml) that provide all the necessary instructions to deploy the API on Google Cloud
+Inside the [workflows](.github/workflows) directory there is a Github Actions file called [deployment.yml](.github/workflows/deployment.yml) that provide all the necessary instructions to deploy the API on Google Cloud (had to shut down the cluster because it was getting expensive).
 
 ## Deployment
 
 ---
 
 I have chosen Kubernetes as the Deployment solution because it is the one I know. All the needed configuration to deploy a working API resides inside the [deployment](/deployment) folder. This config has been created with [kompose](https://kompose.io), a conversion tool to go from Docker Compose to Kubernetes, and then modified by hand to accomplish the desired behavior. The source file used as a template is [docker-compose.kubernetes.yml](docker-compose.kubernetes.yml)
+
+**Note:** Normally you should not commit your secrets, I did it just to keep record of everything needed.
 
 ### Cache
 
