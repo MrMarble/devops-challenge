@@ -2,7 +2,6 @@
 
 ## API
 
----
 Inside the [API](/api) folder resides the Go Code for a simple API REST that gatherers air quality measurements from a PostgreSQL database and serve them in a well-structured JSON.
 
 To populate the database with measurements, the API also serves as an entry point, you can pass a filename as an argument to be parsed and inserted into the database. The supported format is CSV and a sample file is provided. See [environment_airq_measurand.csv](environment_airq_measurand.csv)
@@ -19,13 +18,10 @@ There is also a [docker-compose](docker-compose.yml) environment that will set u
 
 ## CI (Continuous Integration)
 
----
-
 Inside the [workflows](.github/workflows) directory there is a Github Actions file called [deployment.yml](.github/workflows/deployment.yml) that provide all the necessary instructions to deploy the API on Google Cloud (had to shut down the cluster because it was getting expensive).
 
 ## Deployment
 
----
 
 I have chosen Kubernetes as the Deployment solution because it is the one I know. All the needed configuration to deploy a working API resides inside the [deployment](/deployment) folder. This config has been created with [kompose](https://kompose.io), a conversion tool to go from Docker Compose to Kubernetes, and then modified by hand to accomplish the desired behavior. The source file used as a template is [docker-compose.kubernetes.yml](docker-compose.kubernetes.yml)
 
@@ -34,3 +30,7 @@ I have chosen Kubernetes as the Deployment solution because it is the one I know
 ### Cache
 
 [Varnish](https://varnish-cache.org/) was my go-to for caching as it is completely independent of the code so there was no need to modify it, as with redis or similar you have to manually call the cache service inside the code.
+
+## Logs and Monitoring
+
+As I used Google Cloud Engine, I had all the tools needed for seeing logs and monitoring the state of pods.
