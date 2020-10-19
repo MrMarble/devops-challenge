@@ -12,7 +12,7 @@ name: Build and Deploy to GKE
 
 on:
   push:
-    branches-ignore: # Currently I have disabled my cluster so this is to prevent this CI from running
+    branches-ignore: # Currently I have disabled my cluster, this is to prevent this CI from running
       - "*"
     #branches:
     # - main
@@ -35,7 +35,7 @@ jobs:
 
       # In order to maintain a single workflow configuration I though of using some conditional values
       # to determine when to deploy to production, development or staging.
-      # For it to work, you have to set up some github secretes appending at the end the branch name. e.g:
+      # For it to work, you have to set up some github secrets appending at the end the branch name. e.g:
       #   GKE_SA_KEY_MAIN         => This secret will hold the service account key for the production deployment
       #   GKE_PROJECT_DEVELOPMENT => This secret will hold the name of the google cloud project id for development
       - name: Define environment
