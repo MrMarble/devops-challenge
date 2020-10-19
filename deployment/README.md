@@ -16,8 +16,17 @@ Here you will find every file needed to deploy a Kubernetes stack.
 ## Requirements
 
 In order to get Varnish working, you have to set up a `ServiceAccount`, just copy this commands:
+
 ```bash
 $ kubectl create serviceaccount kube-httpcache
 $ kubectl apply -f https://raw.githubusercontent.com/mittwald/kube-httpcache/master/deploy/kubernetes/rbac.yaml
 $ kubectl create rolebinding kube-httpcache --clusterrole=kube-httpcache --serviceaccount=default:kube-httpcache --user=kube-httpcache
+```
+
+## Deploy
+
+To deployt the stack you can use kustomize with:
+
+```bash
+kustomize build deployment | kubectl apply -f -
 ```
